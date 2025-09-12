@@ -220,6 +220,35 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }, {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string",
+                  "example": "any"
+                },
+                "lastName": {
+                  "type": "string",
+                  "example": "any"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "any"
+                },
+                "favoriteColor": {
+                  "type": "string",
+                  "example": "any"
+                },
+                "birthday": {
+                  "type": "string",
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {

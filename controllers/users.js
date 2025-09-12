@@ -3,6 +3,7 @@ const mongodb = require('../data/database');
 // const objectId = require('mongodb').objectId;
 
 const getAll = async (req, res) => {
+    //#swagger.tags=['Users]
     const result = await mongodb.getDatabase().db().collection('users').find();
     result.toArray().then((users) => {
         res.setHeader('Content-Type', 'application/json');
@@ -12,6 +13,7 @@ const getAll = async (req, res) => {
 };
 
 const getSingle = async (req, res) => {
+    //#swagger.tags=['Users]
     const userId = new ObjectId(req.params.id);
     const result = await mongodb.getDatabase().db().collection('users').findOne({ _id: userId });
     res.setHeader('Content-Type', 'application/json');
@@ -19,24 +21,8 @@ const getSingle = async (req, res) => {
 
 };
 
-// const createUser = async (req, res) => {
-//     const user = {
-//         firstName: req.body.firstName, 
-//         lastName: req.body.lastName, 
-//         email: req.body.email, 
-//         favoriteColor: req.body.favoriteColor, 
-//         birthday: req.body.birthday,
-//     };
-//     const response = await mongodb.getDatabase().db().collection('users').insertOne( user );
-//     if (response.acknowledged) {
-//         res.status(201).json(response);
-//     } else {
-//         res.status(500).json(response.error || 'Some error occured while updating the user.');
-//     }
-// };
-
-
 const createUser = async (req, res) => {
+    //#swagger.tags=['Users]
     const user = {
         username: req.body.username, 
         email: req.body.email, 
@@ -52,6 +38,7 @@ const createUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
+    //#swagger.tags=['Users]
     const userId = new ObjectId(req.params.id);
     const user = {
         username: req.body.username, 
@@ -68,6 +55,7 @@ const updateUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
+    //#swagger.tags=['Users]
     const userId = new ObjectId(req.params.id);
     const response = await mongodb.getDatabase().db().collection('users').deleteOne({ _id: userId }, true);
     if (response.deletedCount > 0) {

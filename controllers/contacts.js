@@ -49,13 +49,29 @@ const updateContact = async (req, res) => {
         favoriteColor: req.body.favoriteColor,
         birthday: req.body.birthday,
     };
-    const response = await mongodb.getDatabase().db().collection('contacts').updateOne({ _id: contactId }, { set: contact });
-    if (response.modifiedCount > 0) {
-        res.status(204).send();
-    } else {
-        res.status(500).json(response.error || 'Some error occurred while updating the contact.');
+
+    // Check if contact object is valid
+    if (!contact.firstName || !contact.lastName) {
+        return res.status(400).json({ message: 'Invalid data' });
+    }
+
+    try {
+        const response = await mongodb
+            .getDatabase()
+            .db()
+            .collection('contacts')
+            .updateOne({ _id: contactId }, { $set: contact });
+
+        if (response.matchedCount === 0) {
+            return res.status(404).json({ message: 'Contact not found' });
+        }
+
+        res.status(200).json({ message: 'Contact updated successfully', modifiedCount: response.modifiedCount });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 };
+
 
 // Delete a contact
 const deleteContact = async (req, res) => {
@@ -63,9 +79,9 @@ const deleteContact = async (req, res) => {
     const contactId = new ObjectId(req.params.id);
     const response = await mongodb.getDatabase().db().collection('contacts').deleteOne({ _id: contactId });
     if (response.deletedCount > 0) {
-        res.status(204).send();
+        res.status(200).json({ message: 'Contact deleted successfully' });
     } else {
-        res.status(500).json(response.error || 'Some error occurred while deleting the contact.');
+        res.status(404).json({ message: 'Contact not found' });
     }
 };
 
